@@ -1,6 +1,3 @@
-// backend/controllers/paymentController.js
-const razorpay = require('../services/razorpayService');
-
 exports.createPaymentOrder = async (req, res) => {
   const { amount, currency = 'INR' } = req.body;
   try {
