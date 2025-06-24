@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     }
     setSending(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}api/auth/send-code`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/auth/send-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: form.email }),
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
     setVerifying(true);
     try {
       // 1) verify code
-      let res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/verify-code`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/auth/verify-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: form.email, code: form.code }),
