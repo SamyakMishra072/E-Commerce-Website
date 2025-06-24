@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+
 connectDB();
 
 const app = express();
@@ -21,10 +22,10 @@ app.use('/api/payments', require('./routes/paymentRoutes'));
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API working fine!' });
 });
 
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
