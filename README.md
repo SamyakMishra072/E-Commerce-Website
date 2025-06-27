@@ -2,7 +2,7 @@
 
 A full-stack **E-Commerce Website** with features like **user authentication**, **admin dashboard**, **product management**, and **order processing**.
 
-![E-Commerce Screenshot](https://raw.githubusercontent.com/SamyakMishra072/E-Commerce-Website/main/assets/banner.png)
+![E-Commerce Screenshot](https://github.com/SamyakMishra072/E-Commerce-Website/blob/main/E-COMMMERCE.png)
 
 ---
 
