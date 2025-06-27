@@ -28,6 +28,5 @@ A full-stack **E-Commerce Website** with features like **user authentication**, 
 - 🧑‍💻 **Clean UI**
   - Responsive design
   - Easy navigation and smooth user experience
-  - 
 ## ⭐ Contribute
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
