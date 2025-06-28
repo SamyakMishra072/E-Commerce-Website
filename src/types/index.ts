@@ -80,6 +80,7 @@ export interface Address {
 }
 
 export interface Category {
+  imageUrl: string | undefined;
   id: string;
   name: string;
   slug: string;

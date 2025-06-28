@@ -1,10 +1,9 @@
-// src/services/authService.ts
 import { User } from '../types';
 
 const BASE_URL = `${import.meta.env.VITE_API_BASE}/api/auth`;
 
 export const authService = {
-  async login(email: string, password: string): Promise<User> {
+  async login(email: string, password: string): Promise<{ user: User; token: string }> {
     const res = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -12,11 +11,10 @@ export const authService = {
     });
     if (!res.ok) throw new Error('Login failed');
     const data = await res.json();
-    localStorage.setItem('user', JSON.stringify(data));
     return data;
   },
 
-  async register(name: string, email: string, password: string): Promise<User> {
+  async register(name: string, email: string, password: string): Promise<{ user: User; token: string }> {
     const res = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,16 +25,19 @@ export const authService = {
       throw new Error(message || 'Registration failed');
     }
     const data = await res.json();
-    localStorage.setItem('user', JSON.stringify(data));
     return data;
   },
 
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   },
 
-  async getCurrentUser(): Promise<User | null> {
-    const stored = localStorage.getItem('user');
-    return stored ? JSON.parse(stored) : null;
+  async getCurrentUser(token: string): Promise<User> {
+    const res = await fetch(`${BASE_URL}/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error('Unauthorized');
+    const data = await res.json();
+    return data;
   },
 };

@@ -16,9 +16,10 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
   const fetchOrders = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/orders/my`, {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/orders/my`, {
       headers: { Authorization: `Bearer ${user?.token}` }
     });
+    
     const data = await res.json();
     setOrders(data);
   };

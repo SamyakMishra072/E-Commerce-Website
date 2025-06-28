@@ -10,10 +10,11 @@ import { authService } from '../services/authService';
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
+  loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,21 +33,35 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem('token')
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
-      const currentUser = await authService.getCurrentUser();
-      setUser(currentUser);
+      if (token) {
+        try {
+          const currentUser = await authService.getCurrentUser(token);
+          setUser(currentUser);
+        } catch (err) {
+          console.error('Error fetching user:', err);
+          setUser(null);
+          setToken(null);
+          localStorage.removeItem('token');
+        }
+      }
       setLoading(false);
     };
     loadUser();
-  }, []);
+  }, [token]);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const loggedInUser = await authService.login(email, password);
-      setUser(loggedInUser);
+      const res = await authService.login(email, password);
+      setUser(res.user);
+      setToken(res.token);
+      localStorage.setItem('token', res.token);
       return true;
     } catch (err) {
       console.error('Login error:', err);
@@ -60,8 +75,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     password: string
   ): Promise<boolean> => {
     try {
-      const registeredUser = await authService.register(name, email, password);
-      setUser(registeredUser);
+      const res = await authService.register(name, email, password);
+      setUser(res.user);
+      setToken(res.token);
+      localStorage.setItem('token', res.token);
       return true;
     } catch (err) {
       console.error('Registration error:', err);
@@ -72,16 +89,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     authService.logout();
     setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        token,
+        loading,
         login,
         register,
         logout,
-        loading,
       }}
     >
       {children}

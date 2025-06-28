@@ -17,7 +17,11 @@ exports.protect = async (req, res, next) => {
   }
 };
 
+// ✅ Add this missing export
 exports.admin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) next();
-  else res.status(403).json({ message: 'Admin access only' });
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Admin access only' });
+  }
 };

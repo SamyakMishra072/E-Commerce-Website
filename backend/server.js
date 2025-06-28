@@ -3,6 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const profileRoutes = require('./routes/profileRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
 
 // Connect to MongoDB
 connectDB();
@@ -20,6 +23,8 @@ app.use('/api/cart',     require('./routes/cartRoutes'));
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 app.use('/api/orders',   require('./routes/orderRoutes'));
 app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/profile', profileRoutes);
+
 
 // ✅ Test Route
 app.get('/api/test', (req, res) => {
